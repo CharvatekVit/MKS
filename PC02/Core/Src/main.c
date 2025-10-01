@@ -33,6 +33,10 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 #define  LED_TIME_BLINK 300
+#define  LED_TIME_LONG 1000
+#define  LED_TIME_SHORT 100
+#define  BTN_TIME_ON 40
+#define SHIFT_DELAY    5
 
 /* USER CODE END PD */
 
@@ -57,6 +61,60 @@ static void MX_USART2_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+
+void blink(void)
+{
+	static uint32_t delay;
+
+	if (Tick > delay + LED_TIME_BLINK) {
+		LL_GPIO_TogglePin(LED1_GPIO_Port,LED1_Pin);
+		delay = Tick;
+	}
+}
+
+void button(void){
+
+	static uint32_t delay;
+	static uint32_t delay_5ms;
+	static uint32_t off_time;
+
+
+	if(Tick > delay + BTN_TIME_ON){
+		uint32_t new_s2 = LL_GPIO_IsInputPinSet(S2_GPIO_Port, S2_Pin);
+		static uint32_t old_s2;
+
+		if (old_s2 && !new_s2) { // falling edge
+			off_time = Tick + LED_TIME_LONG;
+			LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
+		}
+		delay = Tick;
+		old_s2 = new_s2;
+	}
+
+
+	if (Tick > delay_5ms + SHIFT_DELAY){
+		static uint16_t debounce = 0xFFFF;
+		uint32_t s1 = LL_GPIO_IsInputPinSet(S1_GPIO_Port, S1_Pin);
+
+		debounce <<= 1;
+		if (s1) {
+			debounce |= 0x0001;
+		}
+
+		if (debounce == 0x7FFF){
+			LL_GPIO_SetOutputPin(LED2_GPIO_Port, LED2_Pin);
+			off_time = Tick + LED_TIME_SHORT;
+		}
+
+		delay_5ms = Tick;
+	}
+
+	if (Tick > off_time) {
+		LL_GPIO_ResetOutputPin(LED2_GPIO_Port, LED2_Pin);
+	}
+
+}
+
 
 /* USER CODE END 0 */
 
@@ -103,6 +161,8 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  blink();
+	  button();
 
   }
   /* USER CODE END 3 */
@@ -227,9 +287,6 @@ static void MX_GPIO_Init(void)
   LL_AHB1_GRP1_EnableClock(LL_AHB1_GRP1_PERIPH_GPIOB);
 
   /**/
-  LL_GPIO_ResetOutputPin(S2_GPIO_Port, S2_Pin);
-
-  /**/
   LL_GPIO_ResetOutputPin(LED1_GPIO_Port, LED1_Pin);
 
   /**/
@@ -256,9 +313,7 @@ static void MX_GPIO_Init(void)
 
   /**/
   GPIO_InitStruct.Pin = S2_Pin;
-  GPIO_InitStruct.Mode = LL_GPIO_MODE_OUTPUT;
-  GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStruct.OutputType = LL_GPIO_OUTPUT_PUSHPULL;
+  GPIO_InitStruct.Mode = LL_GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = LL_GPIO_PULL_UP;
   LL_GPIO_Init(S2_GPIO_Port, &GPIO_InitStruct);
 
@@ -298,16 +353,6 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-
-void blink(void)
- {
- static uint32_t delay;
-
- if (Tick > delay + LED_TIME_BLINK) {
- LL_GPIO_TogglePin(LED2_GPIO_Port,LED2_Pin);
- delay = Tick;
- }
- }
 
 
 /* USER CODE END 4 */
