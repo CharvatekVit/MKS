@@ -56,7 +56,6 @@ UART_HandleTypeDef huart2;
 static volatile uint32_t raw_pot;
 static volatile uint32_t raw_temp;
 static volatile uint32_t raw_volt;
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -387,7 +386,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc){
 	}
 	else {
 		raw_volt = HAL_ADC_GetValue(hadc);
-	};
+	}
 
 	if (__HAL_ADC_GET_FLAG(hadc, ADC_FLAG_EOS)) channel = 0;
 	else channel++;
