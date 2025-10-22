@@ -72,14 +72,12 @@ static void MX_I2C1_Init(void);
 
 int _write(int file, char const *buf, int n)
 {
-	/* stdout redirection to UART2 */
 	HAL_UART_Transmit(&huart2, (uint8_t*)(buf), n, HAL_MAX_DELAY);
 	return n;
 }
 
 void uart_process_command(char* cmd)
 {
-	//printf("received: '%s'\n", cmd);
 	uint8_t value;
 	uint16_t addr;
 	char *token;
@@ -116,7 +114,7 @@ void uart_process_command(char* cmd)
 		} else
 			printf("LED1 OFF\n");
 
-		if (HAL_GPIO_ReadPin(LED2_GPIO_Port, LED2_Pin) == 1){
+		if (HAL_GPIO_ReadPin(LED2_GPIO_Port, LED2_Pin)){
 			printf("LED2 ON\n");
 		} else
 			printf("LED2 OFF\n");
@@ -139,7 +137,7 @@ void uart_process_command(char* cmd)
 		value = atoi(token);
 		HAL_I2C_Mem_Write(&hi2c1, EEPROM_ADDR, addr, I2C_MEMADD_SIZE_16BIT, &value, 1, 1000);
 
-		while (HAL_I2C_IsDeviceReady(&hi2c1, EEPROM_ADDR, 300, 1000) == HAL_TIMEOUT) {}
+		while (HAL_I2C_IsDeviceReady(&hi2c1, EEPROM_ADDR, 300, 1000) != HAL_OK) {}
 
 		printf("OK\n");
 	}
