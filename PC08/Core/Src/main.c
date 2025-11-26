@@ -76,8 +76,8 @@ void step(float x, float y, bool btn)
 
 }
 
-void circle(float r)
-{
+void circles(float r, float nPhi, float rot){
+
 	float x;
 	float y;
 	float dx;
@@ -88,7 +88,7 @@ void circle(float r)
 	{
 		static int32_t sx;
 		static int32_t sy;
-		phi = (2*pi/50) * i;
+		phi = (nPhi*pi/50) * i + (rot*pi);
 		x = r*cosf(phi);
 		y = r*sinf(phi);
 		dx = x - sx;
@@ -99,6 +99,12 @@ void circle(float r)
 	}
 
 	step(0, 0, 0);
+
+}
+
+void circle(float r)
+{
+	circles(r, 2, 0);
 }
 
 void move(float x, float y)
@@ -109,27 +115,7 @@ void move(float x, float y)
 
 void smile(float r)
 {
-	float x;
-	float y;
-	float dx;
-	float dy;
-	float phi;
-
-	for(uint32_t i = 0; i <= 50; i++)
-	{
-		static int32_t sx;
-		static int32_t sy;
-		phi = ((pi)/50) * i + pi;
-		x = r*cosf(phi);
-		y = r*sinf(phi);
-		dx = x - sx;
-		dy = y - sy;
-		sx += dx;
-		sy += dy;
-		step(dx, dy, 1);
-	}
-
-	step(0, 0, 0);
+	circles(r, 1, 1);
 }
 
 /* USER CODE END 0 */
