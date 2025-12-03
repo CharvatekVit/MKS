@@ -9,11 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
--include Drivers/STM32F0xx_HAL_Driver/Src/subdir.mk
+-include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include objects.mk
@@ -64,8 +60,8 @@ all: main-build
 main-build: PC07.elf secondary-outputs
 
 # Tool invocations
-PC07.elf PC07.map: $(OBJS) $(USER_OBJS) C:\Temp\246850\MKS\PC07\STM32F030R8TX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "PC07.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0 -T"C:\Temp\246850\MKS\PC07\STM32F030R8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PC07.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+PC07.elf PC07.map: $(OBJS) $(USER_OBJS) C:\Temp\246850\MKS\PC07\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "PC07.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Temp\246850\MKS\PC07\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PC07.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

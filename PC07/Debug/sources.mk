@@ -24,9 +24,5 @@ C_DEPS :=
 SUBDIRS := \
 Core/Src \
 Core/Startup \
-Drivers/STM32F0xx_HAL_Driver/Src \
-Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS \
-Middlewares/Third_Party/FreeRTOS/Source \
-Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0 \
-Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang \
+Drivers/STM32F4xx_HAL_Driver/Src \
 
