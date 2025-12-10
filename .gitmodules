@@ -1,0 +1,3 @@
+[submodule "PC10/Drivers/stm32-hal-rfm95"]
+	path = PC10/Drivers/stm32-hal-rfm95
+	url = https://github.com/henriheimann/stm32-hal-rfm95.git

@@ -59,6 +59,8 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define Col1_Pin GPIO_PIN_3
 #define Col1_GPIO_Port GPIOE
+#define Col4_Pin GPIO_PIN_4
+#define Col4_GPIO_Port GPIOE
 #define Col3_Pin GPIO_PIN_5
 #define Col3_GPIO_Port GPIOE
 #define Col2_Pin GPIO_PIN_6
